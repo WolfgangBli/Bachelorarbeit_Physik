@@ -1,0 +1,12 @@
+# Ausgabedateien #
+*.out
+*.data
+
+# Linux spezifisch #
+.directory
+
+# LaTeX #
+*.aux
+*.log
+*.gz
+
