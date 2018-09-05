@@ -1,6 +1,5 @@
 # Ausgabedateien #
 *.out
-*.data
 
 # Linux spezifisch #
 .directory
