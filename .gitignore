@@ -3,9 +3,3 @@
 
 # Linux spezifisch #
 .directory
-
-# LaTeX #
-*.aux
-*.log
-*.gz
-

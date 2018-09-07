@@ -22,19 +22,19 @@ vector<complex<double> > H(vector<complex<double> > psi,int L){
     //Schleife fuer die Vektorkomponenten
     for(int i=0; i<l; ++i){
       switch((i>>k)&3){
-	case 0: phi[i]+=0.25*psi[i];
-		break;
-	case 1: j = i+(1<<k);
-		phi[j]+=0.5*psi[i];
-		phi[i]+=(-0.25)*psi[i];
-		break;
-	case 2: j = i-(1<<k);
-		phi[j]+=0.5*psi[i];
-		phi[i]+=(-0.25)*psi[i];
-		break;
-	case 3: phi[i]+=0.25*psi[i];
-		break;
-	default: cout<<"Fehler"<<endl; break;
+          case 0: phi[i]+=0.25*psi[i];
+            break;
+          case 1: j = i+(1<<k);
+            phi[j]+=0.5*psi[i];
+            phi[i]+=(-0.25)*psi[i];
+            break;
+          case 2: j = i-(1<<k);
+            phi[j]+=0.5*psi[i];
+            phi[i]+=(-0.25)*psi[i];
+            break;
+          case 3: phi[i]+=0.25*psi[i];
+            break;
+          default: cout<<"Fehler"<<endl; break;
       }
     }
   }
