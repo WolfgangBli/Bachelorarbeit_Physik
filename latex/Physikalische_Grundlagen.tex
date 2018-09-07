@@ -1,0 +1,113 @@
+\documentclass[11pt,a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{physics}
+\usepackage[obeyspaces]{url}
+
+\title{Physikalische Grundlagen}
+\author{Wolfgang Bliemetsrieder}
+\date{}
+
+% Neudefinition von maketitle ohne Datum und Autor
+\makeatletter
+\renewcommand{\@maketitle}{
+\newpage
+ \null
+ \vskip 2em
+ \begin{center}
+  {\LARGE \@title \par}
+ \end{center}
+ \par} \makeatother
+
+\begin{document}
+\maketitle
+Das Programm \path{data.out} berechnet die Zeitentwicklung eines Systems. Die Zeitentwicklung ist die Lösung der Differentialgleichung,
+\begin{equation*}
+	H\ket{\psi (t)}=i\partial_t\ket{\psi (t)},
+\end{equation*}
+diese Gleichung ist die Schrödingergleichung. Eine Funktion die dafür im Programm implementiert wurde ist der Hamiltonoperator $H$. Hier wird die Mathematik dieses Operators kurz erklärt, damit das Programm nachvollzogen werden kann.
+
+Das Heisenberg-Modell wird durch den Hamiltonoperator
+\begin{equation*}
+	H=\sum_{i=1}^{L-1}\vb{S}_i\cdot\vb{S}_{i+1}
+\end{equation*}
+beschrieben. Der dazugehörige Hilbertraum ist $\mathscr{H}=\{\mathbb{C}^2\}^{\otimes L}$ und wird durch die Basis $\{\ket{\uparrow},\ket{\downarrow}\}^{\otimes L}$ beschrieben. Um dies alles zu erklären wird zunächst der Spezialfall $L=2$ betrachtet, in diesem sind die interessanten Eigenschaften bereits alle enthalten.
+\section{Fall $L=2$}
+In diesem Fall hat der Hamiltonoperator nur einen einzigen Summenden, den man mit Hilfe von Spinoperatoren wie folgt vereinfachen kann.
+\begin{align*}
+	H&=\vb{S}_1\cdot\vb{S}_2\\%=S_x(1)S_x(2)+S_y(1)S_y(2)+S_z(1)S_z(2)\\
+%	&=\frac{1}{2}(S_+(1)+S_-(1))\frac{1}{2}(S_+(2)+S_-(2))
+%	+\frac{1}{2i}(S_+(1)-S_-(1))\frac{1}{2i}(S_+(2)-S_-(2))
+%	+S_z(1)S_z(2)\\
+%	&=\frac{1}{4}(S_+(1)+S_-(1))(S_+(2)+S_-(2))
+%	-\frac{1}{4}(S_+(1)-S_-(1))(S_+(2)-S_-(2))
+%	+S_z(1)S_z(2)\\
+%	&=\frac{1}{4}(S_+(1)S_-(2)+S_-(1)S_+(2)+S_+(1)S_-(2)+S_-(1)S_+(2))
+%	+S_z(1)S_z(2)\\
+	&=\frac{1}{2}\Big[S_+(1)S_-(2)+S_-(1)S_+(2)\Big]
+	+S_z(1)S_z(2)
+\end{align*}
+Die Basis wird dann geschrieben als $\left\{\ket{\downarrow\downarrow},\ket{\downarrow\uparrow},\ket{\uparrow\downarrow},\ket{\uparrow\uparrow}\right\}$. Der Hilbertraum besteht dann aus allen komplexen Linearkombinationen dieser Vektoren, das heißt
+\begin{equation*}
+\mathscr{H}=\left\{c_0\ket{\downarrow\downarrow}+c_1\ket{\downarrow\uparrow}+c_2\ket{\uparrow\downarrow}+c_3\ket{\uparrow\uparrow}\middle|c_0,c_1,c_2,c_3\in\mathbb{C}\right\}.
+\end{equation*}
+\subsection{Spinoperatoren}
+Die auftretenden Spinoperatoren wirken immer auf einen einzelnen Spins der Spinkette. Für einen einzelnen Spin lassen sich diese Operatoren einfach erklären.
+
+Der Spin wird nach Konvention in z-Richtung gemessen und man unterscheidet zwischen Spin Up $\ket{\uparrow}$ und Spin Down $\ket{\downarrow}$, diese beiden Vektoren bilden eine Eigenbasis des Operators $S_z$. Neben $S_z$ treten noch die Operatoren $S_+$ und $S_-$ auf. $S_+$ dreht einen Spin Down nach oben und macht ihn zu einem Spin Up. Falls aber schon ein Spin Up vorliegt, wird dieser von $S_+$ vernichtet. $S_-$ verhält sich genau umgekehrt. Das Verhalten dieser drei Operatoren ist hier nochmal aufgelistet.
+\begin{align*}
+	S_+\ket{\uparrow}&=0 & S_+\ket{\downarrow}&=\ket{\uparrow}\\
+	S_-\ket{\uparrow}&=\ket{\downarrow} & S_-\ket{\downarrow}&=0\\
+	S_z\ket{\uparrow}&=\frac{1}{2}\ket{\uparrow} &
+	S_z\ket{\downarrow}&=-\frac{1}{2}\ket{\downarrow}
+\end{align*}
+\subsection{Der Hamiltionoperator}
+Falls nun eine Spinkette vorliegt, so schreibt man einfach die Pfeile nacheinander $\ket{\uparrow\downarrow}$ und meint damit, dass der erste Spin nach unten zeigt also Spin Down und der zweite nach oben also Spin Up (wir zählen hier von rechts nach links, weil dass besser zur Implementierung im Programm passt). Nun lässt sich ermitteln wie der Hamiltonoperator wirkt.
+\begin{equation*}
+	H=\frac{1}{2}\Big[S_+(1)S_-(2)+S_-(1)S_+(2)\Big]+S_z(1)S_z(2).
+\end{equation*}
+Die Zahl in den runden Klammern gibt an, auf welchen Spin dieser Operator wirkt, das heißt man erhält zum Beispiel
+\begin{equation*}
+	S_+(1)\ket{\uparrow\downarrow}=\ket{\uparrow\uparrow},
+\end{equation*}
+weil $S_+(1)$ nur auf den rechten Spin wirkt. Somit kann man einfach bestimmen, wie der Hamiltonoperator auf die vier Basisvektoren wirkt:
+\begin{align*}
+	H\ket{\downarrow\downarrow}&=\frac{1}{4}\ket{\downarrow\downarrow}\\
+	H\ket{\downarrow\uparrow}
+	&=\frac{1}{2}\ket{\uparrow\downarrow}-\frac{1}{4}\ket{\downarrow\uparrow}\\
+	H\ket{\uparrow\downarrow}
+	&=\frac{1}{2}\ket{\downarrow\uparrow}-\frac{1}{4}\ket{\uparrow\downarrow}\\
+	H\ket{\uparrow\uparrow}&=\frac{1}{4}\ket{\uparrow\uparrow}
+\end{align*}
+Nun kann man auch feststellen wie $H$ auf einen allgemeinen Zustand $\ket{\psi}\in\mathscr{H}$ wirkt.
+\begin{align*}
+	H\ket{\psi}
+	&=H\Big[c_0\ket{\downarrow\downarrow}+c_1\ket{\downarrow\uparrow}
+	+c_2\ket{\uparrow\downarrow}+c_3\ket{\uparrow\uparrow}\Big]\\
+	&=c_0H\ket{\downarrow\downarrow}+c_1H\ket{\downarrow\uparrow}
+	+c_2H\ket{\uparrow\downarrow}+c_3H\ket{\uparrow\uparrow}
+\end{align*}
+\section{Allgemein}
+Der allgemeine Fall ist nun nicht mehr schwer. Ein Zustand, oder Vektor, hat die Form
+\begin{equation*}
+	\ket{\psi}=\sum_{i=0}^{2^L-1}c_i\ket{**\dots*},
+\end{equation*}
+wobei die Sternchen $*$ entweder $\downarrow$ oder $\uparrow$ sind. Dann ist
+\begin{align*}
+	H\ket{\psi}&=
+	\left(\sum_{k=1}^{L-1}\vb{S}_k\cdot\vb{S}_{k+1}\right)
+	\left(\sum_{i=0}^{2^L-1}c_i\ket{**\dots*}\right)\\
+	&=\sum_{k=1}^{L-1}\sum_{i=0}^{2^L-1}c_i\vb{S}_k\cdot\vb{S}_{k+1}\ket{**\dots*}
+\end{align*}
+und der letzte Term $\vb{S}_i\cdot\vb{S}_{i+1}\ket{**\dots*}$ wird wie im Fall $L=2$ berechnet.
+\section{Umsetzung}
+Nun gibt es noch eine kleine Bemerkung zur Umsetzung im Programm. Um einen Zustand $\ket{\psi}$ zu speichern müssen $2^L$ komplexe Zahlen abgelegt werden. Dies wird mit \texttt{vector<complex<double> >} realisiert. Um alle Basisvektoren zu nummerieren, werden diese in Binärzahlen umgewandelt indem $\downarrow$ durch eine $0$ und $\uparrow$ durch eine $1$ ersetzt. Zum Beispiel:
+\begin{equation*}
+	\ket{\uparrow\downarrow\uparrow}\longrightarrow(101)_2=(8)_{10}
+\end{equation*}
+Die komplexe Zahl $c_i$ für diesen Basisvektor wird dann in der Vektorkomponente mit dem Index $i$ abgespeichert.
+\end{document}

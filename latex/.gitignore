@@ -1,0 +1,8 @@
+# LaTeX #
+*.aux
+*.log
+*.pdf
+*.gz
+
+# Linux #
+.directory
